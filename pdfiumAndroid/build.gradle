@@ -1,0 +1,118 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+android {
+    namespace "com.shockwave.pdfium"
+    compileSdkVersion 35
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 35
+
+
+        // Enable NDK abi filters
+//        ndk {
+//            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+//        }
+//
+//        externalNativeBuild {
+//            cmake {
+//                // Pass any CMake arguments if required
+//                arguments "-DANDROID_STL=c++_shared"
+//            }
+//        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []     // disable automatic ndk-build
+            jniLibs.srcDir 'src/main/libs'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+//    kotlinOptions {
+//        jvmTarget = '11'
+//    }
+
+//    externalNativeBuild {
+//        cmake {
+//            // Path to your CMakeLists.txt
+//            path "CMakeLists.txt"
+//            version "3.22.1" // (optional, pick version installed in Android Studio)
+//        }
+//    }
+//
+//    ndkVersion "29.0.14033849" // specify NDK version installed on your system
+
+    ndkVersion "28.0.12433566"
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // Consider migrating from support-v4 to AndroidX if possible
+    api "androidx.core:core:1.13.1"
+    api "androidx.annotation:annotation:1.9.1"
+}
+
+//java {
+//    toolchain {
+//        languageVersion = JavaLanguageVersion.of(17)
+//    }
+//}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+//                groupId = 'com.github.akramraza2'
+//                artifactId = 'pdfium-android'
+//                version = '1.0.0'
+                from components.findByName("release")
+            }
+        }
+    }
+}
+
+
+
+
+
+
+/*afterEvaluate {
+    publishing {
+        publications {
+            create("release", MavenPublication) {
+                // IMPORTANT: include the component correctly
+                from components.findByName("release")
+
+                groupId = "com.github.akramraza2.PdfViewers"
+                artifactId = "pdfiumAndroid"
+                version = "1.0.0"
+
+                pom {
+                    name.set("pdfiumAndroid")
+                    description.set("PDFium core library for Android PDF rendering.")
+                    url.set("https://github.com/akramraza2/PdfViewers")
+                }
+            }
+        }
+    }
+}*/
+
+/*
+//tasks.whenTaskAdded { task ->
+//    if (task.name == "publishReleasePublicationToMavenLocal") {
+//        task.dependsOn("bundleReleaseAar")
+//    }
+//}*/
+
